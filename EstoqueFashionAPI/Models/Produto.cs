@@ -7,7 +7,7 @@ namespace EstoqueFashionAPI.Models
 {
     public class Produto
     {
-        public int ID { get; set; }
+        public int IdProduto { get; set; }
         public string DescricaoProduto { get; set; }
         public int QuantidadeProduto { get; set; }
         public double CustoProduto { get; set; }

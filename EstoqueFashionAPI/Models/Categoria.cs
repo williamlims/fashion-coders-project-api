@@ -7,7 +7,7 @@ namespace EstoqueFashionAPI.Models
 {
     public class Categoria
     {
-        public int ID { get; set; }
+        public int IdCategoria { get; set; }
         public string DescricaoCategoria { get; set; }
     }
 }
