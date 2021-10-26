@@ -9,9 +9,9 @@ namespace EstoqueFashionAPI.Models
     {
         public int IdProduto { get; set; }
         public string DescricaoProduto { get; set; }
+        public string CategoriaProduto { get; set; }
         public int QuantidadeProduto { get; set; }
         public double CustoProduto { get; set; }
-        public string ImagemProduto { get; set; }
-        public string Categoria { get; set; }
+        public string ImagemProduto { get; set; }        
     }
 }

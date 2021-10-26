@@ -1,33 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EstoqueFashionAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ProdutoController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-
         public ProdutoController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         [HttpGet]
-
         public JsonResult Get()
         {
             string query = @"
-                            select idProduto, descricao, categoria, quantidade, custo, imagem,  
-                            from dbo.produto";
+                            select idProduto, descricao, categoria, quantidade, custo, imagem  
+                            from produto";
 
             DataTable tabela = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("EstoqueAppCon");
@@ -36,7 +29,7 @@ namespace EstoqueFashionAPI.Controllers
             using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
             {
                 mycon.Open();
-                using(MySqlCommand myComando = new MySqlCommand(query, mycon))
+                using (MySqlCommand myComando = new MySqlCommand(query, mycon))
                 {
                     myReader = myComando.ExecuteReader();
                     tabela.Load(myReader);
@@ -45,7 +38,6 @@ namespace EstoqueFashionAPI.Controllers
                     mycon.Close();
                 }
             }
-
             return new JsonResult(tabela);
         }
     }
