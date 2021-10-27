@@ -7,11 +7,19 @@ namespace EstoqueFashionAPI.Models
 {
     public class Produto
     {
-        public int IdProduto { get; set; }
-        public string DescricaoProduto { get; set; }
-        public string CategoriaProduto { get; set; }
-        public int QuantidadeProduto { get; set; }
-        public double CustoProduto { get; set; }
-        public string ImagemProduto { get; set; }        
+        public int Id { get; set; }
+        public bool Status { get; set; }
+        public string Descricao { get; set; }
+        public string Categoria { get; set; }
+        public int Quantidade { get; set; }
+        public double Custo { get; set; }
+        public string Imagem { get; set; }        
     }
+
+    public enum Categoria
+    {
+        Feminino,
+        Masculina,
+        Infantil
+    };
 }
