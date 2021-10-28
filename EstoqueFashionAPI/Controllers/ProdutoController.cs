@@ -1,4 +1,5 @@
 ﻿using EstoqueFashionAPI.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -77,8 +78,8 @@ namespace EstoqueFashionAPI.Controllers
             return new JsonResult("Produto inserido!");
         }
 
-        [HttpPut]
-        public JsonResult Put(Produto produto)
+        [HttpPut("{id}")]
+        public JsonResult Put(Produto produto, int id)
         {
             string query = @"
                             update produto set 
@@ -99,7 +100,7 @@ namespace EstoqueFashionAPI.Controllers
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
                 {
-                    myCommand.Parameters.AddWithValue("@id", produto.Id);
+                    myCommand.Parameters.AddWithValue("@id", id);
                     myCommand.Parameters.AddWithValue("@status", produto.Status);
                     myCommand.Parameters.AddWithValue("@descricao", produto.Descricao);
                     myCommand.Parameters.AddWithValue("@categoria", produto.Categoria);

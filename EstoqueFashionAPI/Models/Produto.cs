@@ -16,10 +16,11 @@ namespace EstoqueFashionAPI.Models
         public string Imagem { get; set; }        
     }
 
-    public enum Categoria
-    {
-        Feminino,
-        Masculina,
-        Infantil
-    };
+    //
+    //public enum Categoria 
+    //{
+     //   Feminino,
+    //    Masculina,
+    //    Infantil
+    //};
 }
