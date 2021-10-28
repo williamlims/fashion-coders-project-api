@@ -21,7 +21,7 @@ namespace EstoqueFashionAPI.Controllers
         {
             string query = @"
                             select id, status, descricao, categoria, quantidade, custo, imagem  
-                            from Produto;
+                            from produto;
                            ";
 
             DataTable tabela = new DataTable();
@@ -47,7 +47,7 @@ namespace EstoqueFashionAPI.Controllers
         public JsonResult Post(Produto produto)
         {
             string query = @"
-                            insert into Produto (status, descricao, categoria, quantidade, custo, imagem)
+                            insert into produto (status, descricao, categoria, quantidade, custo, imagem)
                             values (@status, @descricao, @categoria, @quantidade, @custo, @imagem);
                             ";
 
@@ -81,7 +81,7 @@ namespace EstoqueFashionAPI.Controllers
         public JsonResult Put(Produto produto)
         {
             string query = @"
-                            update Produto set 
+                            update produto set 
                             status = @status, 
                             descricao = @descricao, 
                             categoria = @categoria, 
