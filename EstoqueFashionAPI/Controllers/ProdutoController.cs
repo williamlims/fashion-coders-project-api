@@ -19,8 +19,9 @@ namespace EstoqueFashionAPI.Controllers
         {
             _configuration = configuration;         
         }
-        
-        //Retornar lista de todos os produtos
+        /// <summary>
+        /// Listar todos os produtos
+        /// </summary>                
         [HttpGet]
         public JsonResult Get()
         {
@@ -47,8 +48,10 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult(tabela);
         }
-        
-        //Adicionar produto na lista
+
+        /// <summary>
+        /// Cadastrar produto
+        /// </summary>        
         [HttpPost]
         public JsonResult Post(Produto produto)
         {
@@ -109,8 +112,11 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult("Produto adicionado!");
         }
-        
-        //Editar um produto
+
+        /// <summary>
+        /// Editar um produto cadastrado
+        /// </summary>
+        /// <param name="id">Id do produto que será editado</param>        
         [HttpPut("{id}")]
         public JsonResult Put(Produto produto, int id)
         {
@@ -180,9 +186,13 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult("Produto atualizado!");
         }
-                
-        //Inativar ou ativar produto
-        [HttpPut("id={id}/status={status}")]
+
+        /// <summary>
+        /// Inativar ou ativar um produto cadastrado
+        /// </summary>
+        /// <param name="id">Id do produto que será desativado ou ativado</param>
+        /// <param name="status">Status 0 para inativar; Sataus 1 para ativar</param>        
+        [HttpPut("{id}/{status}")]
         public JsonResult Put(int id, int status )
         {
             string query = @"
@@ -223,8 +233,12 @@ namespace EstoqueFashionAPI.Controllers
             return new JsonResult("Produto ATIVADO");
         }
 
-        //Retirar ou adicionar quantidade do produto no estoque
-        [HttpPut("id={id}/valor={valor}")]
+        /// <summary>
+        /// Retirar ou adicionar quantidade do produto no estoque
+        /// </summary>
+        /// <param name="id">Id do produto que será atualizada a quatidade</param>
+        /// <param name="valor">Quantidade para retirar ou adicionar ao estoque</param>       
+        [HttpPut("{id}/{valor}")]
         public JsonResult Put(int id, long valor)
         {
             string query = @"

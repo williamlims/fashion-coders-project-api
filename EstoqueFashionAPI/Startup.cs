@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace EstoqueFashionAPI
 {
@@ -32,7 +35,15 @@ namespace EstoqueFashionAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EstoqueFashionAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                                     { 
+                                        Title = "Estoque Fashion API", 
+                                        Version = "v1",
+                                        Description= "Projeto para C&A Fashion Devs"});
+                //habilitar leitura dos comentários <sumary>
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -45,7 +56,7 @@ namespace EstoqueFashionAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EstoqueFashionAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Estoque Fashion API v1"));
             }
 
             app.UseHttpsRedirection();
