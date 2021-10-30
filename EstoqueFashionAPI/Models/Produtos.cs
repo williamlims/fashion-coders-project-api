@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EstoqueFashionAPI.Models
 {
-    public class Produto
+    public class Produtos
     {
         public int Id { get; set; }
         public bool Status { get; set; }
