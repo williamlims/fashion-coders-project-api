@@ -39,12 +39,12 @@ namespace EstoqueFashionAPI
                                      { 
                                         Title = "Estoque Fashion API", 
                                         Version = "v1",
-                                        Description= "Projeto para C&A Fashion Devs"});
+                                        Description= "Projeto para C&A Fashion Devs"});                
                 //habilitar leitura dos comentários <sumary>
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-            });
+            });           
         }
 
         //Configuração Http
