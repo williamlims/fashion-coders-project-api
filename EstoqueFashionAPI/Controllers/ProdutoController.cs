@@ -76,12 +76,9 @@ namespace EstoqueFashionAPI.Controllers
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Descrição'!");
                     }
-                    else if (string.IsNullOrEmpty(produto.Categoria))
-                    {
-                        return new JsonResult("É obrigatório o preenchimento do campo 'Categoria'!");
-                    }
-                    else if ((produto.Categoria == "Feminino") ||(produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
-                    {
+                    else if ((string.IsNullOrEmpty(produto.Categoria)) 
+                        || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
+                    {                    
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
                     }                       
                     else if (produto.Quantidade <= 0)
@@ -140,20 +137,18 @@ namespace EstoqueFashionAPI.Controllers
                     if (produto == null)
                     {
                         return new JsonResult("É obrigatório o preenchimento ds campos!");
-                    }                    
+                    }
                     else if (!((produto.Status).Equals(0)) && !((produto.Status).Equals(1)))
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Status' com 1(Produto ativado) ou 0(Produto desativado)!");
                     }
-                    else if(string.IsNullOrEmpty(produto.Descricao))
+                    else if (string.IsNullOrEmpty(produto.Descricao))
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Descrição'!");
                     }
-                    else if (string.IsNullOrEmpty(produto.Categoria) ||
-                       produto.Categoria == "Feminino" ||
-                       produto.Categoria == "Masculino" ||
-                       produto.Categoria == "Infantil")
-                    {
+                    else if ((string.IsNullOrEmpty(produto.Categoria))
+                        || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
+                    { 
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
                     }
                     else if (produto.Quantidade <= 0)
@@ -186,8 +181,8 @@ namespace EstoqueFashionAPI.Controllers
             return new JsonResult("Produto atualizado!");
         }
                 
-        //Inativar produto
-        [HttpPut("{id}/status={status}")]
+        //Inativar ou ativar produto
+        [HttpPut("id={id}/status={status}")]
         public JsonResult Put(int id, int status )
         {
             string query = @"
@@ -226,6 +221,39 @@ namespace EstoqueFashionAPI.Controllers
                 return new JsonResult("Produto DESATIVADO");
             }
             return new JsonResult("Produto ATIVADO");
-        }              
+        }
+
+        //Retirar ou adicionar quantidade do produto no estoque
+        [HttpPut("id={id}/valor={valor}")]
+        public JsonResult Put(int id, long valor)
+        {
+            string query = @"
+                            update produto set 
+                            quantidade = quantidade + (@quantidade)
+                            where id = @id;
+                            ";
+
+            DataTable tabela = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("EstoqueAppCon");
+            MySqlDataReader myReader;
+
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {                    
+                    myCommand.Parameters.AddWithValue("@id", id);
+                    myCommand.Parameters.AddWithValue("@quantidade", valor);
+
+                    myReader = myCommand.ExecuteReader();
+                    tabela.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult("Quantidade do produto no estoque atualizada");
+            
+        }
     }   
 }
