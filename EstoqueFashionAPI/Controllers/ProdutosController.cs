@@ -12,15 +12,16 @@ namespace EstoqueFashionAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProdutoController : ControllerBase
+    public class ProdutosController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public ProdutoController(IConfiguration configuration)
+        public ProdutosController(IConfiguration configuration)
         {
             _configuration = configuration;         
         }
-        
-        //Retornar lista de todos os produtos
+        /// <summary>
+        /// Listar todos os produtos
+        /// </summary>                
         [HttpGet]
         public JsonResult Get()
         {
@@ -47,10 +48,36 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult(tabela);
         }
-        
-        //Adicionar produto na lista
+
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+            string query = @"select * from produto where id=@ProdutoId";
+
+            DataTable tabela = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("EstoqueAppCon");
+            MySqlDataReader myReader;
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProdutoId", id);
+                    myReader = myCommand.ExecuteReader();
+                    tabela.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult(tabela);
+        }
+
+        /// <summary>
+        /// Cadastrar produto
+        /// </summary>        
         [HttpPost]
-        public JsonResult Post(Produto produto)
+        public JsonResult Post(Produtos produto)
         {
             string query = @"
                             insert into produto (status, descricao, categoria, quantidade, custo, imagem)
@@ -76,12 +103,9 @@ namespace EstoqueFashionAPI.Controllers
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Descrição'!");
                     }
-                    else if (string.IsNullOrEmpty(produto.Categoria))
-                    {
-                        return new JsonResult("É obrigatório o preenchimento do campo 'Categoria'!");
-                    }
-                    else if ((produto.Categoria == "Feminino") ||(produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
-                    {
+                    else if ((string.IsNullOrEmpty(produto.Categoria)) 
+                        || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
+                    {                    
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
                     }                       
                     else if (produto.Quantidade <= 0)
@@ -112,10 +136,13 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult("Produto adicionado!");
         }
-        
-        //Editar um produto
+
+        /// <summary>
+        /// Editar um produto cadastrado
+        /// </summary>
+        /// <param name="id">Id do produto que será editado</param>        
         [HttpPut("{id}")]
-        public JsonResult Put(Produto produto, int id)
+        public JsonResult Put(Produtos produto, int id)
         {
             string query = @"
                             update produto set 
@@ -140,20 +167,18 @@ namespace EstoqueFashionAPI.Controllers
                     if (produto == null)
                     {
                         return new JsonResult("É obrigatório o preenchimento ds campos!");
-                    }                    
+                    }
                     else if (!((produto.Status).Equals(0)) && !((produto.Status).Equals(1)))
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Status' com 1(Produto ativado) ou 0(Produto desativado)!");
                     }
-                    else if(string.IsNullOrEmpty(produto.Descricao))
+                    else if (string.IsNullOrEmpty(produto.Descricao))
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Descrição'!");
                     }
-                    else if (string.IsNullOrEmpty(produto.Categoria) ||
-                       produto.Categoria == "Feminino" ||
-                       produto.Categoria == "Masculino" ||
-                       produto.Categoria == "Infantil")
-                    {
+                    else if ((string.IsNullOrEmpty(produto.Categoria))
+                        || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
+                    { 
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
                     }
                     else if (produto.Quantidade <= 0)
@@ -185,9 +210,13 @@ namespace EstoqueFashionAPI.Controllers
             }
             return new JsonResult("Produto atualizado!");
         }
-                
-        //Inativar produto
-        [HttpPut("{id}/status={status}")]
+
+        /// <summary>
+        /// Inativar ou ativar um produto cadastrado
+        /// </summary>
+        /// <param name="id">Id do produto que será desativado ou ativado</param>
+        /// <param name="status">Status 0 para inativar; Sataus 1 para ativar</param>        
+        [HttpPut("{id}/{status}")]
         public JsonResult Put(int id, int status )
         {
             string query = @"
@@ -226,6 +255,43 @@ namespace EstoqueFashionAPI.Controllers
                 return new JsonResult("Produto DESATIVADO");
             }
             return new JsonResult("Produto ATIVADO");
-        }              
+        }
+
+        /// <summary>
+        /// Retirar ou adicionar quantidade do produto no estoque
+        /// </summary>
+        /// <param name="id">Id do produto que será atualizada a quatidade</param>
+        /// <param name="valor">Quantidade para retirar ou adicionar ao estoque</param>       
+        [HttpPut("{id}/{valor}")]
+        public JsonResult Put(int id, long valor)
+        {
+            string query = @"
+                            update produto set 
+                            quantidade = quantidade + (@quantidade)
+                            where id = @id;
+                            ";
+
+            DataTable tabela = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("EstoqueAppCon");
+            MySqlDataReader myReader;
+
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {                    
+                    myCommand.Parameters.AddWithValue("@id", id);
+                    myCommand.Parameters.AddWithValue("@quantidade", valor);
+
+                    myReader = myCommand.ExecuteReader();
+                    tabela.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult("Quantidade do produto no estoque atualizada");
+            
+        }
     }   
 }

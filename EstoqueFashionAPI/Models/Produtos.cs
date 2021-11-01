@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EstoqueFashionAPI.Models
 {
-    public class Produto
+    public class Produtos
     {
         //id não deve ser acessado diretamente
         private int Id { get; set; }
