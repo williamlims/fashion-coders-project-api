@@ -12,10 +12,10 @@ namespace EstoqueFashionAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProdutoController : ControllerBase
+    public class ProdutosController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public ProdutoController(IConfiguration configuration)
+        public ProdutosController(IConfiguration configuration)
         {
             _configuration = configuration;         
         }
@@ -49,11 +49,35 @@ namespace EstoqueFashionAPI.Controllers
             return new JsonResult(tabela);
         }
 
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+            string query = @"select * from produto where id=@ProdutoId";
+
+            DataTable tabela = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("EstoqueAppCon");
+            MySqlDataReader myReader;
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProdutoId", id);
+                    myReader = myCommand.ExecuteReader();
+                    tabela.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult(tabela);
+        }
+
         /// <summary>
         /// Cadastrar produto
         /// </summary>        
         [HttpPost]
-        public JsonResult Post(Produto produto)
+        public JsonResult Post(Produtos produto)
         {
             string query = @"
                             insert into produto (status, descricao, categoria, quantidade, custo, imagem)
@@ -118,7 +142,7 @@ namespace EstoqueFashionAPI.Controllers
         /// </summary>
         /// <param name="id">Id do produto que será editado</param>        
         [HttpPut("{id}")]
-        public JsonResult Put(Produto produto, int id)
+        public JsonResult Put(Produtos produto, int id)
         {
             string query = @"
                             update produto set 
