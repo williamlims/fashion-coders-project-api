@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\TECHSTUDIO\\Desktop\\fashion-coders-project-api\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj": {}
+    "C:\\Desenvolvimento\\Fashion Coders\\API-01novembro\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\TECHSTUDIO\\Desktop\\fashion-coders-project-api\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj": {
+    "C:\\Desenvolvimento\\Fashion Coders\\API-01novembro\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\TECHSTUDIO\\Desktop\\fashion-coders-project-api\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj",
+        "projectUniqueName": "C:\\Desenvolvimento\\Fashion Coders\\API-01novembro\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj",
         "projectName": "EstoqueFashionAPI",
-        "projectPath": "C:\\Users\\TECHSTUDIO\\Desktop\\fashion-coders-project-api\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj",
-        "packagesPath": "C:\\Users\\TECHSTUDIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\TECHSTUDIO\\Desktop\\fashion-coders-project-api\\EstoqueFashionAPI\\obj\\",
+        "projectPath": "C:\\Desenvolvimento\\Fashion Coders\\API-01novembro\\EstoqueFashionAPI\\EstoqueFashionAPI.csproj",
+        "packagesPath": "C:\\Users\\Diego-NoteW\\.nuget\\packages\\",
+        "outputPath": "C:\\Desenvolvimento\\Fashion Coders\\API-01novembro\\EstoqueFashionAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\TECHSTUDIO\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Diego-NoteW\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

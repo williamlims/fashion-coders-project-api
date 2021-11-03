@@ -17,7 +17,7 @@ namespace EstoqueFashionAPI.Controllers
         private readonly IConfiguration _configuration;
         public ProdutosController(IConfiguration configuration)
         {
-            _configuration = configuration;         
+            _configuration = configuration;
         }
         /// <summary>
         /// Listar todos os produtos
@@ -103,25 +103,25 @@ namespace EstoqueFashionAPI.Controllers
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Descrição'!");
                     }
-                    else if ((string.IsNullOrEmpty(produto.Categoria)) 
+                    else if ((string.IsNullOrEmpty(produto.Categoria))
                         || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
-                    {                    
+                    {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
-                    }                       
+                    }
                     else if (produto.Quantidade <= 0)
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Quantidade' com valor maior que 0!");
-                    } 
+                    }
                     else if (produto.Custo <= 0)
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Custo' com valor maior que 00.00!");
-                    } 
+                    }
 
                     //Valores enviados por Json atribuidos aos campos da query
                     myCommand.Parameters.AddWithValue("@status", produto.Status);
                     //retira espaço inicial e final e deixa minúsculo
                     myCommand.Parameters.AddWithValue("@descricao", produto.Descricao.Trim().ToLower());
-                    myCommand.Parameters.AddWithValue("@categoria", produto.Categoria);                    
+                    myCommand.Parameters.AddWithValue("@categoria", produto.Categoria);
                     myCommand.Parameters.AddWithValue("@quantidade", produto.Quantidade);
                     //duas casas decimais
                     myCommand.Parameters.AddWithValue("@custo", Math.Round(produto.Custo, 2));
@@ -178,7 +178,7 @@ namespace EstoqueFashionAPI.Controllers
                     }
                     else if ((string.IsNullOrEmpty(produto.Categoria))
                         || !((produto.Categoria == "Feminino") || (produto.Categoria == "Masculino") || (produto.Categoria == "Infantil")))
-                    { 
+                    {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Categoria' com Feminino, Masculino ou Infantil!");
                     }
                     else if (produto.Quantidade <= 0)
@@ -188,14 +188,14 @@ namespace EstoqueFashionAPI.Controllers
                     else if (produto.Custo <= 0)
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Custo' com valor maior que 00.00!");
-                    }                    
+                    }
 
                     //Valores enviados por Json atribuidos aos campos da query
                     myCommand.Parameters.AddWithValue("@id", id);
                     myCommand.Parameters.AddWithValue("@status", produto.Status);
                     //retira espaço inicial e final e deixa minúsculo
                     myCommand.Parameters.AddWithValue("@descricao", produto.Descricao.Trim().ToLower());
-                    myCommand.Parameters.AddWithValue("@categoria", produto.Categoria);                    
+                    myCommand.Parameters.AddWithValue("@categoria", produto.Categoria);
                     myCommand.Parameters.AddWithValue("@quantidade", produto.Quantidade);
                     //duas casas decimais
                     myCommand.Parameters.AddWithValue("@custo", Math.Round(produto.Custo, 2));
@@ -216,8 +216,8 @@ namespace EstoqueFashionAPI.Controllers
         /// </summary>
         /// <param name="id">Id do produto que será desativado ou ativado</param>
         /// <param name="status">Status 0 para inativar; Sataus 1 para ativar</param>        
-        [HttpPut("{id}/{status}")]
-        public JsonResult Put(int id, int status )
+        [HttpPut("{id}/status={status}")]
+        public JsonResult Put(int id, int status)
         {
             string query = @"
                             update produto set 
@@ -233,12 +233,12 @@ namespace EstoqueFashionAPI.Controllers
             {
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-                {                    
+                {
                     if (!(status.Equals(0)) && !(status.Equals(1)))
                     {
                         return new JsonResult("É obrigatório o preenchimento do campo 'Status' com 1(Produto ativado) ou 0(Produto desativado)!");
                     }
-                    
+
                     myCommand.Parameters.AddWithValue("@id", id);
                     myCommand.Parameters.AddWithValue("@status", status);
 
@@ -262,7 +262,7 @@ namespace EstoqueFashionAPI.Controllers
         /// </summary>
         /// <param name="id">Id do produto que será atualizada a quatidade</param>
         /// <param name="valor">Quantidade para retirar ou adicionar ao estoque</param>       
-        [HttpPut("{id}/{valor}")]
+        [HttpPut("{id}/valor={valor}")]
         public JsonResult Put(int id, long valor)
         {
             string query = @"
@@ -279,7 +279,7 @@ namespace EstoqueFashionAPI.Controllers
             {
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-                {                    
+                {
                     myCommand.Parameters.AddWithValue("@id", id);
                     myCommand.Parameters.AddWithValue("@quantidade", valor);
 
@@ -291,7 +291,7 @@ namespace EstoqueFashionAPI.Controllers
                 }
             }
             return new JsonResult("Quantidade do produto no estoque atualizada");
-            
+
         }
-    }   
+    }
 }
